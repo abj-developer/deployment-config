@@ -2,6 +2,29 @@ version: "3.9"
 
 services:
 
+  nginx:
+    image: nginx:1.28-alpine
+    container_name: nginx
+
+    ports:
+      - "80:80"
+
+    restart: unless-stopped
+
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
+    depends_on:
+      service-registry:
+        condition: service_healthy
+      department-service:
+        condition: service_started
+      user-service:
+        condition: service_started
+
+    networks:
+      - microservice-network
+
   service-registry:
     build:
       context: ../service-registry
