@@ -4,7 +4,7 @@ services:
 
   service-registry:
     build:
-      context: ./service-registry
+      context: ../service-registry
     image: ambuj/service-registry:v1
     container_name: service-registry
     restart: unless-stopped
@@ -21,7 +21,7 @@ services:
 
   department-service:
     build:
-      context: ./department-service
+      context: ../department-service
     image: ambuj/department-service:v1
     container_name: department-service
     restart: unless-stopped
@@ -35,7 +35,7 @@ services:
 
   user-service:
     build:
-      context: ./user-service
+      context: ../user-service
     image: ambuj/user-service:v1
     container_name: user-service
     restart: unless-stopped
