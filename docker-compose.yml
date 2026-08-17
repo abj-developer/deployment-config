@@ -74,6 +74,23 @@ services:
         condition: service_started
     networks:
       - microservice-network
+ 
+  api-gateway:
+    build:
+      context: ../api-gateway
+    image: ambuj/api-gateway:v1
+    container_name: api-gateway
+    restart: unless-stopped
+
+    ports:
+      - "9196:9196"
+
+    depends_on:
+      service-registry:
+        condition: service_healthy
+
+    networks:
+      - microservice-network
 
 networks:
   microservice-network:
