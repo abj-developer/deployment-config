@@ -94,7 +94,7 @@ services:
     networks:
       - microservice-network
      
-   auth-service:
+  auth-service:
     build:
       context: ../auth-service
     image: ambuj/auth-service:v1
