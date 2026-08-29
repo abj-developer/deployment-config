@@ -51,11 +51,17 @@ services:
     image: ambuj/department-service:v1
     container_name: department-service
     restart: unless-stopped
+    
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      
     ports:
       - "9001:9001"
     depends_on:
       service-registry:
         condition: service_healthy
+      mysql:
+        condition: service_started
     networks:
       - microservice-network
 
@@ -65,12 +71,18 @@ services:
     image: ambuj/user-service:v1
     container_name: user-service
     restart: unless-stopped
+    
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      
     ports:
       - "9002:9002"
     depends_on:
       service-registry:
         condition: service_healthy
       department-service:
+        condition: service_started
+      mysql:
         condition: service_started
     networks:
       - microservice-network
@@ -100,6 +112,10 @@ services:
     image: ambuj/auth-service:v1
     container_name: auth-service
     restart: unless-stopped
+    
+    
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
     ports:
       - "9197:9197"
@@ -107,6 +123,8 @@ services:
     depends_on:
       service-registry:
         condition: service_healthy
+      mysql:
+        condition: service_started
 
     networks:
       - microservice-network
@@ -160,7 +178,31 @@ services:
 
     networks:
       - microservice-network
+
+  mysql:
+    image: mysql:8.4
+    container_name: mysql
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+    networks:
+      - microservice-network
   
 networks:
   microservice-network:
     driver: bridge
+volumes:
+  mysql-data:
