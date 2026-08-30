@@ -66,9 +66,7 @@ services:
       - microservice-network
 
   user-service:
-    build:
-      context: ../user-service
-    image: ambuj/user-service:v1
+    image: ghcr.io/abj-developer/user-service:${USER_SERVICE_TAG:-latest}
     container_name: user-service
     restart: unless-stopped
     
