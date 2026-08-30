@@ -107,9 +107,7 @@ services:
       - microservice-network
      
   auth-service:
-    build:
-      context: ../auth-service
-    image: ambuj/auth-service:v1
+    image: ghcr.io/abj-developer/auth-service:${AUTH_SERVICE_TAG:-latest}
     container_name: auth-service
     restart: unless-stopped
     
