@@ -147,6 +147,10 @@ jobs:
               user-service)
                 export USER_SERVICE_TAG="$IMAGE_TAG"
                 ;;
+                
+              service-registry)
+                export AUTH_SERVICE_TAG="$IMAGE_TAG"
+                ;;
 
               department-service)
                 export DEPARTMENT_SERVICE_TAG="$IMAGE_TAG"
