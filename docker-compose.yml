@@ -31,7 +31,7 @@ services:
   service-registry:
     build:
       context: ../service-registry
-    image: ambuj/service-registry:v1
+    image: ghcr.io/abj-developer/user-service:${SERVICE_REGISTRY_TAG:-latest}
     container_name: service-registry
     restart: unless-stopped
     ports:
@@ -48,7 +48,7 @@ services:
   department-service:
     build:
       context: ../department-service
-    image: ambuj/department-service:v1
+    image: ghcr.io/abj-developer/user-service:${DEPARTMENT_SERVICE_TAG:-latest}
     container_name: department-service
     restart: unless-stopped
     
