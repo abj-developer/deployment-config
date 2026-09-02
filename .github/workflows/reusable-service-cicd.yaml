@@ -1,9 +1,8 @@
-name:  Reusable Microservice CI/CD
+name: Reusable Microservice CI/CD
 
 on:
-   workflow_call:
-   
-     inputs:
+  workflow_call:
+    inputs:
       service_name:
         description: "Microservice name"
         required: true
@@ -100,8 +99,12 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/${{ inputs.service_name }}
-          docker build -t $IMAGE_NAME:${{ github.sha }} .
-          docker push $IMAGE_NAME:${{ github.sha }}
+
+          docker build \
+            -t $IMAGE_NAME:${{ github.sha }} .
+
+          docker push \
+            $IMAGE_NAME:${{ github.sha }}
 
   deploy:
 
@@ -112,7 +115,8 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name:  ${{ inputs.deploy_env }}
+      name: ${{ inputs.deploy_env }}
+
     steps:
 
       - name: Deploy to Oracle VM
@@ -121,12 +125,12 @@ jobs:
           host: ${{ secrets.ORACLE_HOST }}
           username: ${{ secrets.ORACLE_USERNAME }}
           key: ${{ secrets.ORACLE_SSH_KEY }}
+
           script: |
             cd /home/ubuntu/deployment-config
 
             export SERVICE_NAME="${{ inputs.service_name }}"
             export IMAGE_TAG="${{ inputs.image_tag || github.sha }}"
-
 
             echo "===================================="
             echo "Deploying: $SERVICE_NAME"
