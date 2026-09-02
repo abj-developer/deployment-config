@@ -149,7 +149,7 @@ jobs:
                 ;;
                 
               service-registry)
-                export AUTH_SERVICE_TAG="$IMAGE_TAG"
+                export SERVICE_REGISTRY_TAG="$IMAGE_TAG"
                 ;;
 
               department-service)
