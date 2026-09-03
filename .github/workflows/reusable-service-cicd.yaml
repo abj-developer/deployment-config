@@ -167,8 +167,10 @@ jobs:
 
             esac
 
+            set -e
+            
             docker compose pull "$SERVICE_NAME"
 
-            docker compose up -d --no-build "$SERVICE_NAME"
+            docker compose up -d --no-build --no-deps "$SERVICE_NAME"
 
             echo "Deployment completed successfully."
