@@ -161,7 +161,7 @@ jobs:
                 ;;
 
               api-gateway)
-                export API-GATEWAY_TAG="$IMAGE_TAG"
+                export API_GATEWAY_TAG="$IMAGE_TAG"
                 ;;
 
               *)
