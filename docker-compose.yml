@@ -82,9 +82,7 @@ services:
       - microservice-network
  
   api-gateway:
-    build:
-      context: ../api-gateway
-    image: ambuj/api-gateway:v1
+    image: ghcr.io/abj-developer/api-gateway:${API_GATEWAY_TAG:-latest}
     container_name: api-gateway
     restart: unless-stopped
 
