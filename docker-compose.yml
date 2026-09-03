@@ -122,9 +122,7 @@ services:
       - microservice-network
       
   email-service:
-    build:
-      context: ../email-service
-    image: ambuj/email-service:v1
+    image: ghcr.io/abj-developer/email-service:${EMAIL_SERVICE_TAG:-latest}
     container_name: email-service
     restart: unless-stopped
 
