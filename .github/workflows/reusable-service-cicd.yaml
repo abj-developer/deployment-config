@@ -159,6 +159,9 @@ jobs:
               department-service)
                 export DEPARTMENT_SERVICE_TAG="$IMAGE_TAG"
                 ;;
+              email-service)
+                export EMAIL_SERVICE_TAG="$IMAGE_TAG"
+                ;;
 
               api-gateway)
                 export API_GATEWAY_TAG="$IMAGE_TAG"
