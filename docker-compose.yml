@@ -43,9 +43,7 @@ services:
       - microservice-network
 
   service-registry:
-    build:
-      context: ../service-registry
-    image: ambuj/service-registry:v1
+    image: ghcr.io/abj-developer/service-registry:${SERVICE_REGISTRY_TAG:-latest}
     container_name: service-registry
     restart: unless-stopped
     ports:
@@ -60,9 +58,7 @@ services:
       start_period: 30s
 
   department-service:
-    build:
-      context: ../department-service
-    image: ambuj/department-service:v1
+    image: ghcr.io/abj-developer/user-service:${USER_SERVICE_TAG:-latest}
     container_name: department-service
     restart: unless-stopped
     
@@ -80,9 +76,7 @@ services:
       - microservice-network
 
   user-service:
-    build:
-      context: ../user-service
-    image: ambuj/user-service:v1
+    image: ghcr.io/abj-developer/api-gateway:${API_GATEWAY_TAG:-latest}
     container_name: user-service
     restart: unless-stopped
     
@@ -102,9 +96,7 @@ services:
       - microservice-network
  
   api-gateway:
-    build:
-      context: ../api-gateway
-    image: ambuj/api-gateway:v1
+    image: ghcr.io/abj-developer/api-gateway:${API_GATEWAY_TAG:-latest}
     container_name: api-gateway
     restart: unless-stopped
 
@@ -121,9 +113,7 @@ services:
       - microservice-network
      
   auth-service:
-    build:
-      context: ../auth-service
-    image: ambuj/auth-service:v1
+    image: ghcr.io/abj-developer/auth-service:${AUTH_SERVICE_TAG:-latest}
     container_name: auth-service
     restart: unless-stopped
     
@@ -144,9 +134,7 @@ services:
       - microservice-network
       
   email-service:
-    build:
-      context: ../email-service
-    image: ambuj/email-service:v1
+    image: ghcr.io/abj-developer/email-service:${EMAIL_SERVICE_TAG:-latest}
     container_name: email-service
     restart: unless-stopped
 
