@@ -58,7 +58,7 @@ services:
       start_period: 30s
 
   department-service:
-    image: ghcr.io/abj-developer/user-service:${USER_SERVICE_TAG:-latest}
+    image: ghcr.io/abj-developer/department-service:${DEPARTMENT_SERVICE_TAG:-latest}
     container_name: department-service
     restart: unless-stopped
     
@@ -76,7 +76,7 @@ services:
       - microservice-network
 
   user-service:
-    image: ghcr.io/abj-developer/api-gateway:${API_GATEWAY_TAG:-latest}
+    image: ghcr.io/abj-developer/user-service:${USER_SERVICE_TAG:-latest}
     container_name: user-service
     restart: unless-stopped
     
