@@ -2,6 +2,18 @@ version: "3.9"
 
 services:
 
+  angular-build:
+   build:
+     context: ../User-Management Angular-2
+     dockerfile: Dockerfile
+   container_name: angular-build
+   volumes:
+     - angular-dist:/frontend-dist
+   command: >
+     sh -c "rm -rf /frontend-dist/* &&
+            cp -r /app/dist/employee-tracker/browser/* /frontend-dist/"
+   networks:
+     - microservice-network
   nginx:
     image: nginx:1.28-alpine
     container_name: nginx
@@ -16,6 +28,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
+      - angular-dist:/usr/share/nginx/html:ro
 
     depends_on:
       service-registry:
@@ -29,7 +42,9 @@ services:
       - microservice-network
 
   service-registry:
-    image: ghcr.io/abj-developer/service-registry:${SERVICE_REGISTRY_TAG:-latest}
+    build:
+      context: ../service-registry
+    image: ambuj/service-registry:v1
     container_name: service-registry
     restart: unless-stopped
     ports:
@@ -44,7 +59,9 @@ services:
       start_period: 30s
 
   department-service:
-    image: ghcr.io/abj-developer/department-service:${DEPARTMENT_SERVICE_TAG:-latest}
+    build:
+      context: ../department-service
+    image: ambuj/department-service:v1
     container_name: department-service
     restart: unless-stopped
     
@@ -62,7 +79,9 @@ services:
       - microservice-network
 
   user-service:
-    image: ghcr.io/abj-developer/user-service:${USER_SERVICE_TAG:-latest}
+    build:
+      context: ../user-service
+    image: ambuj/user-service:v1
     container_name: user-service
     restart: unless-stopped
     
@@ -82,7 +101,9 @@ services:
       - microservice-network
  
   api-gateway:
-    image: ghcr.io/abj-developer/api-gateway:${API_GATEWAY_TAG:-latest}
+    build:
+      context: ../api-gateway
+    image: ambuj/api-gateway:v1
     container_name: api-gateway
     restart: unless-stopped
 
@@ -99,7 +120,9 @@ services:
       - microservice-network
      
   auth-service:
-    image: ghcr.io/abj-developer/auth-service:${AUTH_SERVICE_TAG:-latest}
+    build:
+      context: ../auth-service
+    image: ambuj/auth-service:v1
     container_name: auth-service
     restart: unless-stopped
     
@@ -120,7 +143,9 @@ services:
       - microservice-network
       
   email-service:
-    image: ghcr.io/abj-developer/email-service:${EMAIL_SERVICE_TAG:-latest}
+    build:
+      context: ../email-service
+    image: ambuj/email-service:v1
     container_name: email-service
     restart: unless-stopped
 
@@ -194,3 +219,4 @@ networks:
     driver: bridge
 volumes:
   mysql-data:
+  angular-dist:
