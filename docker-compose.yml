@@ -3,7 +3,7 @@ version: "3.9"
 services:
   angular-build:
    build:
-     context: ../User-Management Angular-2
+     context: ../user-management-angular-v1
      dockerfile: Dockerfile
    container_name: angular-build
    volumes:
