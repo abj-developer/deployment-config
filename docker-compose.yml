@@ -1,7 +1,18 @@
 version: "3.9"
 
 services:
-
+  angular-build:
+   build:
+     context: ../User-Management Angular-2
+     dockerfile: Dockerfile
+   container_name: angular-build
+   volumes:
+     - angular-dist:/frontend-dist
+   command: >
+     sh -c "rm -rf /frontend-dist/* &&
+            cp -r /app/dist/employee-tracker/browser/* /frontend-dist/"
+   networks:
+     - microservice-network
   nginx:
     image: nginx:1.28-alpine
     container_name: nginx
@@ -16,6 +27,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
+      - angular-dist:/usr/share/nginx/html:ro
 
     depends_on:
       service-registry:
@@ -194,3 +206,4 @@ networks:
     driver: bridge
 volumes:
   mysql-data:
+  angular-dist:
