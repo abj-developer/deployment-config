@@ -25,13 +25,13 @@ on:
         type: string
 
     secrets:
-      ORACLE_HOST:
+      AWS_HOST:
         required: true
 
-      ORACLE_USERNAME:
+      AWS_USERNAME:
         required: true
 
-      ORACLE_SSH_KEY:
+      AWS_SSH_KEY:
         required: true
 
 permissions:
@@ -110,7 +110,10 @@ jobs:
 
     needs: build-and-test
 
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    if: >
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' ||
+      github.event_name == 'workflow_dispatch'
 
     runs-on: ubuntu-latest
 
@@ -119,14 +122,16 @@ jobs:
 
     steps:
 
-      - name: Deploy to Oracle VM
+      - name: Deploy to AWS EC2
         uses: appleboy/ssh-action@v1.2.2
         with:
-          host: ${{ secrets.ORACLE_HOST }}
-          username: ${{ secrets.ORACLE_USERNAME }}
-          key: ${{ secrets.ORACLE_SSH_KEY }}
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.AWS_SSH_KEY }}
 
           script: |
+            set -e
+
             cd /home/ubuntu/deployment-config
 
             export SERVICE_NAME="${{ inputs.service_name }}"
@@ -147,7 +152,7 @@ jobs:
               user-service)
                 export USER_SERVICE_TAG="$IMAGE_TAG"
                 ;;
-                
+
               service-registry)
                 export SERVICE_REGISTRY_TAG="$IMAGE_TAG"
                 ;;
@@ -155,10 +160,7 @@ jobs:
               department-service)
                 export DEPARTMENT_SERVICE_TAG="$IMAGE_TAG"
                 ;;
-                
-              department-service)
-                export DEPARTMENT_SERVICE_TAG="$IMAGE_TAG"
-                ;;
+
               email-service)
                 export EMAIL_SERVICE_TAG="$IMAGE_TAG"
                 ;;
@@ -174,10 +176,10 @@ jobs:
 
             esac
 
-            set -e
-            
+            echo "Pulling image..."
             docker compose pull "$SERVICE_NAME"
 
+            echo "Starting service..."
             docker compose up -d --no-build --no-deps "$SERVICE_NAME"
 
             echo "Deployment completed successfully."
